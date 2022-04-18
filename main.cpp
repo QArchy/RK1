@@ -1,10 +1,10 @@
 #include <iostream>
+#include <QRegularExpression>
 
 #include "charfrequency.h"
 #include "TenToTwo.h"
 #include "doublearraymean.h"
 #include "list.h"
-#include "binaryhextohex.h"
 #include "studentlist.h"
 
 /* 1. Cчитать текстовый файл и определить частотность символов в этом файле
@@ -38,12 +38,12 @@ void test_StudentList();
 int main()
 {
     //test_CharFrequency("test_cf.txt");
-                     //  1   1   0   1   0   1   1   0   1
-    //BinaryHexToHex("0x310x310x300x310x300x310x310x300x31");
+                                //  1   1   0   1   0   1   1   0   1
+    //std::cout << BinaryHexToHex("0x310x310x300x310x300x310x310x300x31").toStdString();
     //test_TenToTwo(11223, false);
     //test_DoubleArrayMean();
-    test_List();
-    //test_StudentList();
+    //test_List();
+    test_StudentList();
     return 0;
 }
 
@@ -63,40 +63,48 @@ void test_TenToTwo(int decimal, bool young_first_old_last) {
 }
 QString BinaryHexToHex(QString binary_hex)
 {
+    // каждое 0x3 в строке заменяем на пустоту ("")
     QString str = binary_hex.replace(QRegularExpression("0x3"), "");
+    // десятичное число
     uint decimal = 0;
 
+    // переводим двоичное число в десятичное по алгоритму
     for (uint i = 0; i < str.size(); i++)
+        // str[i].toLatin1() возвращает char, а по таблице ASCII кодов мы из char
+        // делаем соответствующее число
         decimal += (str[i].toLatin1() - 48) * pow(2, str.size() - i - 1);
+    // чистим строку чтобы использовать ее для записи десятичного числа в шестнадцатиричное
     str.clear();
 
+    // пока не обнунилось int'овое десятичное число
     while (decimal != 0) {
+        // берем остаток от деления на 16
         uint hex = decimal % 16;
-
+        // если число меньше десяти то
         if (hex < 10)
+            // просто записываем его в начало строки
             str.push_front(QChar(QString::number(hex)[0]));
+        // если больше или равно 10 по таблице ASCII записываем соответствующую букву
         str.push_front(QChar(hex + 55));
-
+        // делим число на 16 в соответствии с алгоритмом
         decimal /= 16;
     }
-
+    // возвращаем шестнадцатиричное число
     return str;
 }
 void test_DoubleArrayMean() {
     uint rows = 10;
-    uint* cols = new uint[rows];
-    for (uint i = 0; i < rows; i++)
-        cols[i] = 10;
+    uint cols = 10;
 
     DoubleArray obj = DoubleArray(rows, cols, false);
 
     // fill
     for (uint i = 0; i < rows; i++)
-        for (uint j = 0; j < cols[i]; j++)
+        for (uint j = 0; j < cols; j++)
             obj(i, j) = i + j;
     // print
     for (uint i = 0; i < rows; i++) {
-        for (uint j = 0; j < cols[i]; j++)
+        for (uint j = 0; j < cols; j++)
             std::cout << obj(i, j) << ' ';
         std::cout << std::endl;
     }

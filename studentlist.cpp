@@ -1,13 +1,17 @@
 #include "studentlist.h"
 
 void StudentList::add_student(QString fio) {
+    // QMap<QString, QMap<QString, QVector<uint>>>
     lst[fio];
 }
 void StudentList::add_subject(QString subj_name) {
     for (auto i = lst.begin(); i != lst.end(); i++)
+        // i.value возвращает QMap<QString, QVector<uint>>
         i.value()[subj_name];
 }
 void StudentList::add_grade(QString fio, QString subj_name, uint grade) {
+    // lst[fio] возвращает QMap<QString, QVector<uint>>
+    // lst[fio][subj_name] возвращает QVector<uint>
     lst[fio][subj_name].append(grade);
 }
 double StudentList::get_mean(QString fio, QString subj_name) {
@@ -19,6 +23,7 @@ double StudentList::get_mean(QString fio, QString subj_name) {
 void StudentList::show_student_info(QString fio) {
     std::cout << fio.toStdString() << std::endl;
     std::cout << '\t' << "Оценки по предметам : " << std::endl;
+    // lst[fio] возвращает QMap<QString, QVector<uint>>
     for (auto i = lst[fio].begin(); i != lst[fio].end(); i++) {
         std::cout << "\t\t" << i.key().toStdString() << " : ";
         for (uint j = 0; j < i.value().size(); j++)

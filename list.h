@@ -28,7 +28,9 @@ private:
 public:
     Node() { data = new Data(); }
     Node(int number) { this->data = new Data(number); }
+    // берем значение pprev
     Node *getPprev() const { return pprev; }
+    // устанавливаем новое значение pprev
     void setPprev(Node *newPprev) { pprev = newPprev; }
     Node *getPnext() const { return pnext; }
     void setPnext(Node *newPnext) { pnext = newPnext; }
